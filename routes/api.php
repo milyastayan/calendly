@@ -26,7 +26,7 @@ Route::middleware('auth:api')->group(function () {
         return new UserResource(auth()->user());
     });
 
-    Route::resource('users', 'App\Http\Controllers\Api\UserController');
+    Route::resource('events', 'App\Http\Controllers\Api\EventController');
 
 
 });
