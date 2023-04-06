@@ -27,6 +27,8 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::resource('events', 'App\Http\Controllers\Api\EventController');
+    Route::get('{user_id}/events/{custom_link}', 'App\Http\Controllers\Api\EventController@showSchedule');
+    Route::post('{user_id}/events/{event_id}/appointments', 'App\Http\Controllers\Api\AppointmentController@store');
 
 
 });

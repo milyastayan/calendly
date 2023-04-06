@@ -78,4 +78,19 @@ class EventController extends Controller
         $event->delete();
         return $this->respondWithSuccess();
     }
+
+    public function showSchedule($user_id, $custom_link)
+    {
+        // Get the event based on the custom_link
+        $event = Event::where('user_id', $user_id)->where('custom_link', $custom_link)->firstOrFail();
+
+        // Get the available dates and times
+        $appointments = $event->getAvailableAppointments();
+
+        return response()->json([
+            'event' => new EventResource($event),
+            'appointments' => $appointments
+        ]);
+    }
+
 }
