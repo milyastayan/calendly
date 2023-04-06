@@ -61,7 +61,7 @@ To create a new event, log in to the application and navigate to the Events page
 fill in the details for the event. Click "Save" to create the event.
 
 ### Scheduling Appointments
-To schedule a new appointment for an event, navigate to the event details page and click on the "Schedule Appointment"
+To schedule a new appointment for an event, navigate to the event custom link and click on the "Schedule Appointment"
 button. Fill in the details for the appointment and click "Save" to create the appointment.
 
 ### Zoom Meetings
