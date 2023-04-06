@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->string('meeting_link')->nullable();
+            $table->dateTime('reminder_time')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

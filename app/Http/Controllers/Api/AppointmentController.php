@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Mail\AppointmentConfirmation;
-use App\Mail\ReminderEmail;
+use App\Mail\AppointmentReminder;
 use App\Models\Event;
 use Illuminate\Support\Carbon;
 use App\Traits\ZoomMeetingTrait;
@@ -64,17 +64,17 @@ class AppointmentController extends Controller
             'start_time' => $start_time,
             'end_time' => $end_time,
             'meeting_link' => $link,
+            'reminder_time' => $start_time->copy()->subHour(),
         ]);
 
         $mail = new AppointmentConfirmation($appointment);
         Mail::to($event->user->email)->send($mail);
         Mail::to($appointment->guest_email)->send($mail);
 
-        // Send reminder email to the guest before 1 hour of the meeting
-        $reminder_time = $start_time->copy()->subHour();
-        $reminder_mail = new ReminderEmail($appointment);
-        Mail::to($appointment->guest_email)->later($reminder_time, $reminder_mail);
-        Mail::to($event->user->email)->later($reminder_time, $reminder_mail);
+        // Send reminder email
+        $reminder_mail = new AppointmentReminder($appointment);
+        Mail::to($event->user->email)->later($appointment->reminder_time, $reminder_mail);
+        Mail::to($appointment->guest_email)->later($appointment->reminder_time, $reminder_mail);
 
         return new AppointmentResource($appointment);
     }

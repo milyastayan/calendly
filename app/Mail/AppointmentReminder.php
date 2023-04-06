@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Appointment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,10 +9,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ReminderEmail extends Mailable
+class AppointmentReminder extends Mailable
 {
     use Queueable, SerializesModels;
-
     public $appointment;
 
     /**
@@ -21,12 +19,10 @@ class ReminderEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(Appointment $appointment)
+    public function __construct($appointment)
     {
         $this->appointment = $appointment;
     }
-
-
 
     /**
      * Get the message envelope.
@@ -36,7 +32,7 @@ class ReminderEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Reminder Email',
+            subject: 'Appointment Reminder',
         );
     }
 
@@ -45,32 +41,35 @@ class ReminderEmail extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
+//    public function content()
+//    {
+//        return new Content(
+//            view: 'appointment_reminder',
+//        );
+//    }
+//
+//    /**
+//     * Get the attachments for the message.
+//     *
+//     * @return array
+//     */
+//    public function attachments()
+//    {
+//        return [];
+//    }
 
     /**
-     * Get the attachments for the message.
+     * Build the message.
      *
-     * @return array
+     * @return $this
      */
-    public function attachments()
-    {
-        return [];
-    }
-
     public function build()
     {
-        $meetingTime = strtotime($this->appointment->start_time);
-        $currentTime = time();
-        $diffInMinutes = round(($meetingTime - $currentTime) / 60);
+        $start_time = $this->appointment->start_time->format('M d, Y h:i A');
+        $guest_name = $this->appointment->guest_name;
+        $subject = "Reminder: You have an appointment with {$guest_name} on {$start_time}";
 
-        if ($diffInMinutes == 60) {
-            return $this->markdown('emails.reminder', ['appointment' => $this->appointment])
-                ->subject('Reminder: Your Meeting is scheduled in 1 hour');
-        }
+        return $this->view('emails.appointment-reminder')
+            ->subject($subject);
     }
 }

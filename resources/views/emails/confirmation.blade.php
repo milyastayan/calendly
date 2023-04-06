@@ -16,5 +16,5 @@
     Thank you for choosing us for your appointment needs. We look forward to speaking with you soon!
 
     Best regards,
-    The Massaq Team
+    The MSSAQ Team
 @endcomponent
